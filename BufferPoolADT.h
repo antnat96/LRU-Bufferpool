@@ -13,6 +13,7 @@
 #define	BUFFERPOOLADT_H
 
 #include <string>
+#include "LRUBufferBlock.h"
 using namespace std;
 
 // ADT for buffer pools using the message-passing style

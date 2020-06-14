@@ -16,7 +16,12 @@ class LRUBufferPool : public BufferPoolADT {
 private:
 
 public:
-	//virtual ~BufferPoolADT() {}
+	LRUBufferPool(string filename, int poolSize = 5, int blockSize = 4096) {
+
+	}
+	~LRUBufferPool() {
+
+	}
 
 	// Copy "sz" bytes from position "pos" of the buffered
 	//   storage to "space".
@@ -33,6 +38,7 @@ public:
 	// Get the block id number of the least recently used 
 	//	 buffer block.
 	int getLRUBlockID() {
+		return 1;
 	}
 
 };

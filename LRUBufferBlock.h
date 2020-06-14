@@ -20,7 +20,13 @@ private:
 	int blockSize;
 
 public:
-	//~BufferBlockADT() {}
+	LRUBufferBlock(char* data, int sz = 4096) {
+
+	}
+
+	~LRUBufferBlock() {
+
+	}
 
 	// Setters
 	//setID
