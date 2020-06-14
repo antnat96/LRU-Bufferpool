@@ -11,11 +11,53 @@
 #include "BufferBlockADT.h"
 using namespace std;
 
-// ADT for buffer pools using the message-passing style
+// ADT implementation for a single buffer block
 class LRUBufferBlock : public BufferBlockADT {
 private:
+	// Some private variables
+	int blockID;
+	char* block;
+	int blockSize;
 
 public:
+	//~BufferBlockADT() {}
+
+	// Setters
+	//setID
+	void setID(int id) {
+		blockID = id;
+	}
+
+	//set the block
+	void setBlock(char* blk) {
+		block = blk;
+		blockSize = strlen(block);
+	}
+
+	// Getters
+	//read the block from pos to pos + sz-1 (or to the end of the block)
+	void getData(int pos, int sz, char* data) {
+		cout << "My data for block " << blockID << " is: \"";
+		for (int i = pos; i < sz; i++) {
+			cout << "Getting the block data, iteration #" << i << endl;
+		}
+		cout << "\"\n";
+	}
+
+	//getID
+	int getID() const {
+		return blockID;
+	}
+
+	//getBlockSize
+	int getBlockSize() const {
+		return blockSize;
+	}
+
+	//return the block
+	char* getBlock() const {
+		return block;
+	}
 
 };
 

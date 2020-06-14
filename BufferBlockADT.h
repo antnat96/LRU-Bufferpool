@@ -16,8 +16,8 @@ using namespace std;
 class BufferBlockADT {
 private:
     //Instance variables:
-	//	int blockID;
-	//	char* block;
+	int blockID;
+	char* block;
     
 public:
     
@@ -37,7 +37,7 @@ public:
     virtual int getID() const = 0;
     
     //getBlocksize
-    virtual int getBlocksize() const = 0;
+    virtual int getBlockSize() const = 0;
      
     //return the block
     virtual char* getBlock() const = 0;
