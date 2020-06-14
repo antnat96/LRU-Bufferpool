@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class BufferblockADT {
+class BufferBlockADT {
 private:
     //Instance variables:
 	//	int blockID;
@@ -23,9 +23,9 @@ public:
     
 	//sz is the size of the character array data
 	//points to.
-	BufferblockADT() {}
-    BufferblockADT(char* data, int sz = 4096) {}
-	virtual ~BufferblockADT() {}
+	BufferBlockADT() {}
+    BufferBlockADT(char* data, int sz = 4096) {}
+	virtual ~BufferBlockADT() {}
     
     //read the block from pos to pos + sz-1 (or to the end of the block)
     virtual void getData(int pos, int sz, char* data) = 0;

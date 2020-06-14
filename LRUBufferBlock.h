@@ -12,7 +12,7 @@
 using namespace std;
 
 // ADT for buffer pools using the message-passing style
-class LRUBufferBlock : public BufferblockADT {
+class LRUBufferBlock : public BufferBlockADT {
 private:
 
 public:
