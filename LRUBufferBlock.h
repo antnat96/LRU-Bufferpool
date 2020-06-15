@@ -21,7 +21,9 @@ private:
 
 public:
 	LRUBufferBlock(char* data, int sz = 4096) {
-
+		cout << "Running LRUBufferBlock constructor" << endl;
+		block = data;
+		blockSize = sz;
 	}
 
 	~LRUBufferBlock() {

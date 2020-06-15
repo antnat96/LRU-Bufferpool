@@ -17,9 +17,33 @@ private:
 
 public:
 	LRUBufferPool(string filename, int poolSize = 5, int blockSize = 4096) {
+		cout << "Running LRUBufferPool constructor" << endl;
+
+		// Build out all the blocks
+		ifstream input;
+		input.open(filename, ifstream::in | ifstream::binary);
+
+		input.seekg(0, ifstream::end);
+		int fileSize = input.tellg();
+
+		char* wholeFile = new char[fileSize];
+
+		input.read(wholeFile, fileSize);
+
+		//for (int i = 0; i < POOL_SIZE; i++) {
+		//	char* buffer = new char[BLOCKSIZE];
+		//}
+
+		//for (int i = 0; i < POOL_SIZE; i++) {
+		//	input.read(buffer, BLOCKSIZE)
+		//	buffer[i] = input.read()
+
+		//}
+
 
 	}
 	~LRUBufferPool() {
+		cout << "Running pool deconstructor" << endl;
 
 	}
 
@@ -32,6 +56,7 @@ public:
 	// Print the order of the buffer blocks using the block id
 	//	 numbers.
 	void printBufferBlockOrder() {
+		cout << "print buffer block order" << endl;
 	
 	}
 
