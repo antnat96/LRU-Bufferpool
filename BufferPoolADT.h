@@ -20,6 +20,8 @@ using namespace std;
 class BufferPoolADT {
 private:
 	//The buffer pool consists of X number of buffer blocks
+	// Create initial blocks
+	virtual void createInitialBlocks(char* wholeFile, int fileSize, int blockSize, int poolSize) = 0;
 	
 public:
     //Constructor gets the filename of the file to be buffered,

@@ -17,10 +17,10 @@ int main() {
     LRUBufferPool* bp = new LRUBufferPool("mydatafile.txt", POOL_SIZE, BLOCKSIZE);
     
     //get data from the buffer
-    //char* data = new char[10];
-    //bp->getBytes(data, 10, 5030);
-    //printChars(data, 10, 5030/BLOCKSIZE);
-    //bp->printBufferBlockOrder();
+    char* data = new char[10];
+    bp->getBytes(data, 10, 5030);
+    printChars(data, 10, 5030/BLOCKSIZE);
+    bp->printBufferBlockOrder();
 	/*Output should be something like the following:
 		My data for block 1 is: "ment all o"
 		My buffer block order from most recently used to LRU is:

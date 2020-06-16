@@ -16,18 +16,16 @@ class LRUBufferBlock : public BufferBlockADT {
 private:
 	// Some private variables
 	int blockID;
-	char* block;
 	int blockSize;
+	char* block;
 
 public:
 	LRUBufferBlock(char* data, int sz = 4096) {
-		cout << "Running LRUBufferBlock constructor" << endl;
-		block = data;
 		blockSize = sz;
+		block = data;
 	}
 
 	~LRUBufferBlock() {
-
 	}
 
 	// Setters
@@ -45,11 +43,11 @@ public:
 	// Getters
 	//read the block from pos to pos + sz-1 (or to the end of the block)
 	void getData(int pos, int sz, char* data) {
-		cout << "My data for block " << blockID << " is: \"";
+		/*cout << "My data for block " << blockID << " is: \"";
 		for (int i = pos; i < sz; i++) {
 			cout << "Getting the block data, iteration #" << i << endl;
 		}
-		cout << "\"\n";
+		cout << "\"\n";*/
 	}
 
 	//getID
