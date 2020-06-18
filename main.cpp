@@ -19,7 +19,7 @@ int main() {
     //get data from the buffer
     char* data = new char[10];
     bp->getBytes(data, 10, 5030);
-    printChars(data, 10, 5030/BLOCKSIZE);
+    //printChars(data, 10, 5030/BLOCKSIZE);
     bp->printBufferBlockOrder();
 	/*Output should be something like the following:
 		My data for block 1 is: "ment all o"

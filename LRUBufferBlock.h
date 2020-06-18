@@ -26,6 +26,9 @@ private:
 	int blockEnd;
 
 public:
+	LRUBufferBlock() {
+		cout << "do something" << endl;
+	}
 	LRUBufferBlock(char* data, int sz = 4096) {
 		// Set the size-will be 4096 in all cases except the last "block" of the file
 		blockSize = sz;
@@ -54,14 +57,27 @@ public:
 		blockSize = strlen(block);
 	}
 
+	void setBlockStart(int start) {
+		blockStart = start;
+	}
+
+	void setBlockEnd(int end) {
+		blockEnd = end;
+	}
+
 	// Getters
 	//read the block from pos to pos + sz-1 (or to the end of the block)
 	void getData(int pos, int sz, char* data) {
-		/*cout << "My data for block " << blockID << " is: \"";
-		for (int i = pos; i < sz; i++) {
-			cout << "Getting the block data, iteration #" << i << endl;
+		char* temp = new char[sz];
+		pos = pos % BLOCKSIZE;
+		int j = 0;
+		for (int i = pos; i < (pos + sz); i++) {
+			// Assign the characters from block to temp
+			temp[j] = block[i];
+			j++;
 		}
-		cout << "\"\n";*/
+		// Then temp to data
+		data = temp;
 	}
 
 	//getID

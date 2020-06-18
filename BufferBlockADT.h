@@ -29,6 +29,15 @@ public:
     
     //setID
     virtual void setID(int id) = 0;
+
+	// Set the block starting point
+	virtual void setBlockStart(int start) = 0;
+
+	// Set the block ending point
+	virtual void setBlockEnd(int end) = 0;
+
+	//set the block
+	virtual void setBlock(char* blk) = 0;
     
     //getID
     virtual int getID() const = 0;
@@ -38,9 +47,6 @@ public:
      
     //return the block
     virtual char* getBlock() const = 0;
-    
-    //set the block
-    virtual void setBlock(char* blk) = 0;
 
 	// Get the block starting point
 	virtual int getBlockStart() = 0;

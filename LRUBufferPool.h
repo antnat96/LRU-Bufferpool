@@ -22,7 +22,7 @@ class LRUBufferPool : public BufferPoolADT {
 private:
 
 	// Array of Buffer Blocks
-	LRUBufferBlock* blockArr[POOL_SIZE];
+	LRUBufferBlock blockArr[POOL_SIZE];
 	int totalBlocksInFile;
 	int finalBlockSize;
 
@@ -34,7 +34,9 @@ public:
 
 		// Set the block IDs
 		for (int i = 0; i < POOL_SIZE; i++) {
-			blockArr[i]->setID(i);
+			blockArr[i].setID(i);
+			blockArr[i].setBlockStart(i * BLOCKSIZE);
+			blockArr[i].setBlockEnd((i + 1) * BLOCKSIZE);
 		}
 
 		// Open file stream
@@ -59,12 +61,20 @@ public:
 		// Store the first 5 blocks in the char arrays
 		for (int i = 0; i < POOL_SIZE; i++) {
 			char* temp = new char[BLOCKSIZE];
-			input.read(temp, 4096); // Currently doing the whole file, how do we change this?
-			blockArr[i]->setBlock(temp);
+			input.read(temp, BLOCKSIZE); // Currently doing the whole file, how do we change this?
+			blockArr[i].setBlock(temp);
 		}
 
-		cout << "Block 0 info is " << blockArr[0]->getBlock() << endl;
-		cout << "check" << endl;
+		//cout << "Block 0 info is " << blockArr[0].getBlock() << endl;
+		//cout << "check" << endl;
+		//cout << "Block 1 info is\n" << blockArr[1].getBlock() << endl;
+		//cout << "check" << endl;
+		//cout << "Block 2 info is\n" << blockArr[2].getBlock() << endl;
+		//cout << "check" << endl;
+		//cout << "Block 3 info is\n" << blockArr[3].getBlock() << endl;
+		//cout << "check" << endl;
+		//cout << "Block 4 info is\n" << blockArr[4].getBlock() << endl;
+		//cout << "check" << endl;
 
 	}
 	~LRUBufferPool() {
@@ -74,14 +84,26 @@ public:
 	// Copy "sz" bytes from position "pos" of the buffered
 	//   storage to "space".
 	void getBytes(char* space, int sz, int pos) {
-
+		// If the desired position is in a buffer block
+		for (int i = 0; i < POOL_SIZE; i++) {
+			// If pos and pos + sz are after the starting point & pos + sz is before the ending point in the block 
+			if (pos > blockArr[i].getBlockStart() && (pos + sz) > blockArr[i].getBlockStart() && pos < blockArr[i].getBlockEnd() && (pos + sz) < blockArr[i].getBlockEnd()) {
+				// The desired position is in a buffer block
+				// From the block, pull the characters
+				char* temp = new char[sz];
+				blockArr[i].getData(pos, sz, temp);
+				space = temp;
+			}
+		}
+		// Otherwise, look to the file (on disk rather than in RAM)
 	}
 
 	// Print the order of the buffer blocks using the block id
 	//	 numbers.
 	void printBufferBlockOrder() {
-		cout << "print buffer block order" << endl;
-	
+		for (int i = 0; i < POOL_SIZE; i++) {
+			cout << "Block " << blockArr[i].getID() << "\n" << endl;
+		}
 	}
 
 	// Get the block id number of the least recently used 
