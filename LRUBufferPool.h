@@ -21,20 +21,21 @@ using namespace std;
 class LRUBufferPool : public BufferPoolADT {
 private:
 
-	// Declare the buffer blocks in our pool
-	LRUBufferBlock* block0;
-	LRUBufferBlock* block1;
-	LRUBufferBlock* block2;
-	LRUBufferBlock* block3;
-	LRUBufferBlock* block4;
+	// Array of Buffer Blocks
+	LRUBufferBlock* blockArr[POOL_SIZE];
 	int totalBlocksInFile;
 	int finalBlockSize;
 
+
 public:
+
+
 	LRUBufferPool(string filename, int poolSize = 5, int blockSize = 4096) {
 
 		// Set the block IDs
-		block0->setID(0); block1->setID(1); block2->setID(2); block3->setID(3); block4->setID(4);
+		for (int i = 0; i < POOL_SIZE; i++) {
+			blockArr[i]->setID(i);
+		}
 
 		// Open file stream
 		ifstream input;
@@ -48,10 +49,6 @@ public:
 		// Return the pointer to the beginning
 		input.seekg(0, ifstream::beg);
 
-		// Store the entire file in a char array
-		char* wholeFile = new char[fileSize];
-		input.read(wholeFile, fileSize);
-
 		// Figure out how many full blocks we can make
 		int numOfFullBlocks = fileSize / blockSize;
 		// Add 1 for the total number of blocks
@@ -59,9 +56,19 @@ public:
 		// If there are remaining characters, find the size of the final block
 		finalBlockSize = fileSize % blockSize;
 
+		// Store the first 5 blocks in the char arrays
+		for (int i = 0; i < POOL_SIZE; i++) {
+			char* temp = new char[BLOCKSIZE];
+			input.read(temp, 4096); // Currently doing the whole file, how do we change this?
+			blockArr[i]->setBlock(temp);
+		}
+
+		cout << "Block 0 info is " << blockArr[0]->getBlock() << endl;
+		cout << "check" << endl;
+
 	}
 	~LRUBufferPool() {
-		delete block0; delete block1; delete block2; delete block3; delete block4;
+		delete blockArr;
 	}
 
 	// Copy "sz" bytes from position "pos" of the buffered
