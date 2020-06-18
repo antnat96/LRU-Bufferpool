@@ -15,9 +15,6 @@ using namespace std;
 
 class BufferBlockADT {
 private:
-    //Instance variables:
-	int blockID;
-	char* block;
     
 public:
     
@@ -44,6 +41,12 @@ public:
     
     //set the block
     virtual void setBlock(char* blk) = 0;
+
+	// Get the block starting point
+	virtual int getBlockStart() = 0;
+
+	// Get the block ending point
+	virtual int getBlockEnd() = 0;
 };
 
 
