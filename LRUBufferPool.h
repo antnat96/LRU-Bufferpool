@@ -25,12 +25,14 @@ private:
 	LRUBufferBlock blockArr[POOL_SIZE];
 	int totalBlocksInFile;
 	int finalBlockSize;
+	string currentFileName;
 
 
 public:
 
 
 	LRUBufferPool(string filename, int poolSize = 5, int blockSize = 4096) {
+		currentFileName = filename;
 
 		// Set the block IDs
 		for (int i = 0; i < POOL_SIZE; i++) {
@@ -64,18 +66,6 @@ public:
 			input.read(temp, BLOCKSIZE); // Currently doing the whole file, how do we change this?
 			blockArr[i].setBlock(temp);
 		}
-
-		//cout << "Block 0 info is " << blockArr[0].getBlock() << endl;
-		//cout << "check" << endl;
-		//cout << "Block 1 info is\n" << blockArr[1].getBlock() << endl;
-		//cout << "check" << endl;
-		//cout << "Block 2 info is\n" << blockArr[2].getBlock() << endl;
-		//cout << "check" << endl;
-		//cout << "Block 3 info is\n" << blockArr[3].getBlock() << endl;
-		//cout << "check" << endl;
-		//cout << "Block 4 info is\n" << blockArr[4].getBlock() << endl;
-		//cout << "check" << endl;
-
 	}
 	~LRUBufferPool() {
 		delete blockArr;
@@ -88,14 +78,23 @@ public:
 		for (int i = 0; i < POOL_SIZE; i++) {
 			// If pos and pos + sz are after the starting point & pos + sz is before the ending point in the block 
 			if (pos > blockArr[i].getBlockStart() && (pos + sz) > blockArr[i].getBlockStart() && pos < blockArr[i].getBlockEnd() && (pos + sz) < blockArr[i].getBlockEnd()) {
-				// The desired position is in a buffer block
-				// From the block, pull the characters
+				// The desired position is in a buffer block, from the block, pull the characters
 				char* temp = new char[sz];
 				blockArr[i].getData(pos, sz, temp);
+				// Assign them to space
 				space = temp;
+				return;
 			}
 		}
 		// Otherwise, look to the file (on disk rather than in RAM)
+		ifstream tempStream;
+		// Use binary option
+		tempStream.open(currentFileName, ifstream::in | ifstream::binary);
+		// Move to the get pointer
+		tempStream.seekg(pos);
+		// Read the characters into space
+		tempStream.read(space, sz);
+		return;
 	}
 
 	// Print the order of the buffer blocks using the block id
