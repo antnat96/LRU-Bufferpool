@@ -41,6 +41,10 @@ public:
 	// Get the block id number of the least recently used 
 	//	 buffer block.
 	virtual int getLRUBlockID() = 0;
+
+	virtual void reorderBlocksWithoutPushingLast(int arrPosOfBlockJustUsed) = 0;
+
+	virtual void reorderBlocksWithPush(string fileName, int pos) = 0;
 };
 
 

@@ -34,7 +34,7 @@ public:
 	LRUBufferPool(string filename, int poolSize = 5, int blockSize = 4096) {
 		currentFileName = filename;
 
-		// Set the block IDs
+		// Set the block ID, start, end, and size
 		for (int i = 0; i < POOL_SIZE; i++) {
 			blockArr[i].setID(i);
 			blockArr[i].setBlockStart(i * BLOCKSIZE);
@@ -74,15 +74,13 @@ public:
 	// Copy "sz" bytes from position "pos" of the buffered
 	//   storage to "space".
 	void getBytes(char* space, int sz, int pos) {
-		// If the desired position is in a buffer block
+		// Check if the desired condition is in a buffer block
 		for (int i = 0; i < POOL_SIZE; i++) {
-			// If pos and pos + sz are after the starting point & pos + sz is before the ending point in the block 
+			// If the entirety of the position + size are between the block start and end
 			if (pos > blockArr[i].getBlockStart() && (pos + sz) > blockArr[i].getBlockStart() && pos < blockArr[i].getBlockEnd() && (pos + sz) < blockArr[i].getBlockEnd()) {
 				// The desired position is in a buffer block, from the block, pull the characters
-				char* temp = new char[sz];
-				blockArr[i].getData(pos, sz, temp);
-				// Assign them to space
-				space = temp;
+				blockArr[i].getData(pos, sz, space);
+				reorderBlocksWithoutPushingLast(i);
 				return;
 			}
 		}
@@ -94,21 +92,69 @@ public:
 		tempStream.seekg(pos);
 		// Read the characters into space
 		tempStream.read(space, sz);
+		reorderBlocksWithPush(currentFileName, pos);
 		return;
 	}
 
 	// Print the order of the buffer blocks using the block id
 	//	 numbers.
 	void printBufferBlockOrder() {
+		cout << "My buffer block order from most recently used to LRU is:" << endl;
 		for (int i = 0; i < POOL_SIZE; i++) {
-			cout << "Block " << blockArr[i].getID() << "\n" << endl;
+			cout << blockArr[i].getID();
+			if (i != (POOL_SIZE - 1)) {
+				cout << ", ";
+			}
+			else {
+				cout << "\n" << endl;
+			}
 		}
+		return;
 	}
 
 	// Get the block id number of the least recently used 
 	//	 buffer block.
 	int getLRUBlockID() {
-		return 1;
+		return blockArr[POOL_SIZE - 1].getID();
+	}
+
+	void reorderBlocksWithoutPushingLast(int arrPosOfBlockJustUsed) {
+		if (arrPosOfBlockJustUsed == 0) return; // No changes needed
+		LRUBufferBlock tempBlock = blockArr[arrPosOfBlockJustUsed]; // Block just accessed
+		for (int i = (arrPosOfBlockJustUsed - 1); i > -1; i--) {
+			blockArr[i + 1] = blockArr[i];
+		}
+		blockArr[0] = tempBlock;
+		return;
+	}
+
+	void reorderBlocksWithPush(string fileName, int pos) {
+		for (int i = (POOL_SIZE - 2); i > -1; i--) {
+			blockArr[i + 1] = blockArr[i];
+		}
+		// Build temporary block
+		LRUBufferBlock tempBlock;
+		char* tempCharArr = new char[BLOCKSIZE];
+
+		// Otherwise, look to the file (on disk rather than in RAM)
+		ifstream tempStream;
+		// Use binary option
+		tempStream.open(currentFileName, ifstream::in | ifstream::binary);
+		// Find the multiple of the BLOCKSIZE closest to but not greater than pos
+		int blockID = pos / BLOCKSIZE;
+		int startingPoint = blockID * BLOCKSIZE;
+		// Move to the get pointer
+		tempStream.seekg(startingPoint);
+		// Read the characters into tempCharArr
+		tempStream.read(tempCharArr, BLOCKSIZE);
+
+		tempBlock.setBlock(tempCharArr);
+		tempBlock.setBlockStart(startingPoint);
+		tempBlock.setBlockEnd(startingPoint + BLOCKSIZE);
+		tempBlock.setID(blockID);
+
+		blockArr[0] = tempBlock;
+		return;
 	}
 
 };
