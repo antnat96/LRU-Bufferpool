@@ -27,9 +27,7 @@ private:
 	int finalBlockSize;
 	string currentFileName;
 
-
 public:
-
 
 	LRUBufferPool(string filename, int poolSize = 5, int blockSize = 4096) {
 		currentFileName = filename;
